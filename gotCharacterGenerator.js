@@ -1,11 +1,19 @@
-function randomIndex(array) {
-    return Math.floor(Math.random() * array.length);
+function randomFromArray(array) {
+    const randomIndex = Math.floor(Math.random() * array.length);
+    return array[randomIndex];
 }
 
-function characterFactory(name, sex) {
+function nameFactory(name, sex) {
     return {
         name,
         sex,
+    };
+}
+
+function houseFactory(house, legitimacy) {
+    return {
+        house,
+        legitimacy: legitimacy,
     };
 }
 
@@ -112,28 +120,52 @@ const titles = [
     ['Cupbearer'],
 ];
 
-let characters = [];
+let namesObj = [];
 
-// Filling characters list with objects with all names and their sex
-for (i = 0; i < names[0].length; i++) {
-    characters.push(characterFactory(names[0][i], 'male'));
+for (j = 0; j < names.length; j++) {
+    let sex;
+    if (j === 0) {
+        sex = 'male';
+    } else if (j === 1) {
+        sex = 'female';
+    } else {
+        sex = 'non-binary';
+    }
+    for (i = 0; i < names[j].length; i++) {
+        namesObj.push(nameFactory(names[j][i], sex));
+    }
 }
-for (i = 0; i < names[1].length; i++) {
-    characters.push(characterFactory(names[1][i], 'female'));
+
+let housesObj = [];
+
+for (j = 0; j < houses.length; j++) {
+    let legitimacy;
+    if (j === 0) {
+        legitimacy = true;
+    } else {
+        legitimacy = false;
+    }
+    for (i = 0; i < houses[j].length; i++) {
+        housesObj.push(houseFactory(houses[j][i], legitimacy));
+    }
 }
-for (i = 0; i < names[2].length; i++) {
-    characters.push(characterFactory(names[2][i], 'non-binary'));
+
+const character = Object.assign(
+    randomFromArray(namesObj),
+    randomFromArray(housesObj)
+);
+
+let possibleTitles = [];
+
+if (character.name === 'Arya') {
+    possibleTitles = titles[1].concat(titles[2], 'Knight');
+} else if (character.sex === 'male') {
+    possibleTitles = titles[0].concat(titles[2]);
+} else if (character.sex === 'female') {
+    possibleTitles = titles[1].concat(titles[2]);
+} else {
+    possibleTitles = titles[0].concat(titles[1], titles[2]);
 }
-
-const character = characters[randomIndex(characters)];
-
-const housesIndex = randomIndex(houses);
-
-const innerHousesIndex = randomIndex(houses[housesIndex]);
-
-character.house = houses[housesIndex][innerHousesIndex];
-
-let titlesIndex = [];
 
 let titleAmount = 0;
 
@@ -143,51 +175,33 @@ if (Math.random() * 100 < 5) {
     titleAmount = 1;
 }
 
+character.titles = [];
+
 for (i = 0; i < titleAmount; i++) {
-    let newTitlesIndex = 0;
-    if (character.sex === 'male') {
-        do {
-            newTitlesIndex = randomIndex(titles);
-        } while (newTitlesIndex === 1);
-        titlesIndex.push(newTitlesIndex);
-    } else if (character.sex === 'female') {
-        do {
-            newTitlesIndex = randomIndex(titles);
-        } while (newTitlesIndex === 0);
-        titlesIndex.push(newTitlesIndex);
-    } else {
-        titlesIndex.push(randomIndex(titles));
+    const possibleTitle = randomFromArray(possibleTitles);
+    if (character.titles.indexOf(possibleTitle) === -1) {
+        character.titles.push(possibleTitle);
     }
 }
-
-let titlesList = [];
-
-for (index of titlesIndex) {
-    const innerTitleIndex = randomIndex(titles[index]);
-    if (titlesList.indexOf(titles[index][innerTitleIndex]) === -1) {
-        titlesList.push(titles[index][innerTitleIndex]);
-    }
-}
-
-console.log('\nGame of Thrones - Name genereator\n');
 
 let greetings = 'Greetings ';
 
-for (i = 0; i < titlesList.length; i++) {
-    if (i === titlesList.length - 2) {
-        greetings += `${titlesList[i]} and `;
-    } else if (i === titlesList.length - 1) {
-        greetings += `${titlesList[i]} `;
+for (i = 0; i < character.titles.length; i++) {
+    if (i === character.titles.length - 2) {
+        greetings += `${character.titles[i]} and `;
+    } else if (i === character.titles.length - 1) {
+        greetings += `${character.titles[i]} `;
     } else {
-        greetings += `${titlesList[i]}, `;
+        greetings += `${character.titles[i]}, `;
     }
 }
 
 greetings += `${character.name}`;
 
-if (housesIndex === 0) {
+if (character.legitimacy) {
     greetings += ` of ${character.house}`;
 } else {
     greetings += ` ${character.house}`;
 }
+
 console.log(greetings);
