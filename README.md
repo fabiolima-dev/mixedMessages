@@ -2,11 +2,11 @@
 Mixed Messages Portfolio Project from Codecademy
 
 ## 📑 Table of contents
-* [Project Status](project-status)  
-* [General Information](general-information)  
-* [Technologies Used](technologies-used)  
-* [Setup](setup)  
-* [Contact](contact)  
+* [Project Status](#project-status)  
+* [General Information](#general-information)  
+* [Technologies Used](#technologies-used)  
+* [Setup](#setup)  
+* [Contact](#contact)  
 
 ## ✅ Project Status
  Complete
@@ -16,7 +16,7 @@ The Game of Thrones Character Genereator is a command-line app that generates an
 The app generate a random title, name and house, then combine everything into one greeting message.  
 For fans of the series, feel free to search for some easter-eggs hidden in the program, and share if you get any funny combination, or a combination that reflect the characters of the series.
 
-## Technologies Used
+## 🔧 Technologies Used
 Javascript
 
 ## ⚙️ Setup
