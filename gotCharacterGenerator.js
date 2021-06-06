@@ -106,22 +106,33 @@ const houses = [
 const titles = [
     // Male Titles
     [
-        'Lordship',
-        'Acolyte',
-        'Apprentice',
-        'Archmaester',
-        'Bloodrider',
+        'Maester',
         'Captain of the Guards',
-        'Castellann',
+        'Khal',
+        'King',
+        'King in the North',
+        'Knight',
+        'Lord',
+        'Prince',
+        'Squire',
     ],
     // Female titles
-    ['Lady'],
+    ['Lady', 'Khaleesi', 'Princess', 'Queen', 'Septa'],
     // Unisex titles
-    ['Cupbearer'],
+    [
+        'Cupbearer',
+        'Hand of the King',
+        'Master of Coin',
+        'Master of Laws',
+        'Master of Ships',
+        'Master of War',
+        'Master of Whispers',
+    ],
 ];
 
 let namesObj = [];
 
+// Filling namesObj
 for (j = 0; j < names.length; j++) {
     let sex;
     if (j === 0) {
@@ -138,6 +149,7 @@ for (j = 0; j < names.length; j++) {
 
 let housesObj = [];
 
+// Filling housesObj
 for (j = 0; j < houses.length; j++) {
     let legitimacy;
     if (j === 0) {
@@ -150,6 +162,7 @@ for (j = 0; j < houses.length; j++) {
     }
 }
 
+// Assign a random name and house for character
 const character = Object.assign(
     randomFromArray(namesObj),
     randomFromArray(housesObj)
@@ -157,16 +170,19 @@ const character = Object.assign(
 
 let possibleTitles = [];
 
-if (character.name === 'Arya') {
-    possibleTitles = titles[1].concat(titles[2], 'Knight');
-} else if (character.sex === 'male') {
+// Filling possibleTitles based in characters sex
+if (character.sex === 'male') {
     possibleTitles = titles[0].concat(titles[2]);
 } else if (character.sex === 'female') {
     possibleTitles = titles[1].concat(titles[2]);
+    if (character.name === 'Arya') {
+        possibleTitles.push('Knight');
+    }
 } else {
     possibleTitles = titles[0].concat(titles[1], titles[2]);
 }
 
+// Giving a chance to get more than one title
 let titleAmount = 0;
 
 if (Math.random() * 100 < 5) {
@@ -175,6 +191,7 @@ if (Math.random() * 100 < 5) {
     titleAmount = 1;
 }
 
+// Filling character titles
 character.titles = [];
 
 for (i = 0; i < titleAmount; i++) {
@@ -184,7 +201,8 @@ for (i = 0; i < titleAmount; i++) {
     }
 }
 
-let greetings = 'Greetings ';
+// Formatting the message according to randomness
+let greetings = '\nGreetings ';
 
 for (i = 0; i < character.titles.length; i++) {
     if (i === character.titles.length - 2) {
@@ -199,9 +217,9 @@ for (i = 0; i < character.titles.length; i++) {
 greetings += `${character.name}`;
 
 if (character.legitimacy) {
-    greetings += ` of ${character.house}`;
+    greetings += ` of ${character.house}\n`;
 } else {
-    greetings += ` ${character.house}`;
+    greetings += ` ${character.house}\n`;
 }
 
 console.log(greetings);
